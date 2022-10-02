@@ -1,0 +1,486 @@
+                                    
+cart Quantity
+                                    
+                                    <div class="product_count">
+                                        <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
+                                            class="input-text qty">
+                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                                            class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
+                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+                                            class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
+                                    </div>
+
+
+
+
+                                    ...............................................................
+
+
+
+
+                                    single product
+
+                                    <?php
+include('bars/header.php');
+
+?>
+
+	<!-- Start Banner Area -->
+	<section class="banner-area organic-breadcrumb">
+		<div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>Product Details Page</h1>
+					<nav class="d-flex align-items-center">
+						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="#">Shop<span class="lnr lnr-arrow-right"></span></a>
+						<a href="single-product.html">product-details</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Banner Area -->
+
+<?php
+	 $db = mysqli_connect("localhost", "root", "", "bytetech"); 
+
+	 if(isset($_GET['id_i']))
+	 {
+		$result = mysqli_query($db, "SELECT * FROM stock_items WHERE id_i='$_GET[id_i]'");
+	 }else{
+		 echo"data is missing";
+		 exit();
+	 }
+//////add cart
+$database_name = "Product_details";
+    $con = mysqli_connect("localhost","root","",$database_name);
+
+    if (isset($_POST["add"])){
+        if (isset($_SESSION["cart"])){
+            $item_array_id = array_column($_SESSION["cart"],"product_id");
+            if (!in_array($_GET["id"],$item_array_id)){
+                $count = count($_SESSION["cart"]);
+                $item_array = array(
+                    'product_id' => $_GET["id"],
+                    'item_name' => $_POST["hidden_name"],
+                    'product_price' => $_POST["hidden_price"],
+                    'item_quantity' => $_POST["quantity"],
+                );
+                $_SESSION["cart"][$count] = $item_array;
+                echo '<script>window.location="Cart.php"</script>';
+            }else{
+                echo '<script>alert("Product is already Added to Cart")</script>';
+                echo '<script>window.location="Cart.php"</script>';
+            }
+        }else{
+            $item_array = array(
+                'product_id' => $_GET["id"],
+                'item_name' => $_POST["hidden_name"],
+                'product_price' => $_POST["hidden_price"],
+                'item_quantity' => $_POST["quantity"],
+            );
+            $_SESSION["cart"][0] = $item_array;
+        }
+    }
+
+    if (isset($_GET["action"])){
+        if ($_GET["action"] == "delete"){
+            foreach ($_SESSION["cart"] as $keys => $value){
+                if ($value["product_id"] == $_GET["id"]){
+                    unset($_SESSION["cart"][$keys]);
+                    echo '<script>alert("Product has been Removed...!")</script>';
+                    echo '<script>window.location="Cart.php"</script>';
+                }
+            }
+        }
+    }
+
+
+
+///////////
+	while( $row = mysqli_fetch_array($result))
+	{
+	 
+?>
+
+	<!--================Single Product Area =================-->
+	<form action="cart.php?action=add&id=<?php echo $row["id_i"]?>" method="post" >
+	<div class="product_image_area">
+		<div class="container">
+			<div class="row s_product_inner">
+				<div class="col-lg-6">
+					<div class="s_Product_carousel">
+						<div class="single-prd-item">
+						<?php	echo "<img src='./img/".$row['image'] . "'>";?>
+						</div>
+						<div class="single-prd-item">
+						<?php	echo "<img src='./img/".$row['image'] . "'>";?>
+						</div>
+						<div class="single-prd-item">
+						<?php	echo "<img src='./img/".$row['image'] . "'>";?>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-5 offset-lg-1">
+					<div class="s_product_text">
+						<h3><?php echo $row['item']?></h3>
+						<h2>₹<?php echo $row['discount'];?></h2>
+						<h6>₹<strike><?php echo $row['price'];?></strike></h6>
+						<input type="hidden" name="hidden_price" value="<?php echo $row['discount'];?>">
+	 					<input type="hidden" name="hidden_name" value="<?php echo $row['item'];?>">
+
+
+						<ul class="list">
+							<li><a class="active" href="#"><span>Category</span> : <?php echo $row['cat'];?></a></li>
+							<li><a href="#"><span>Availibility</span> : In Stock</a></li>
+						</ul>
+						<p> <?php echo $row['about'];?> </p>
+						<div class="product_count">
+							<label for="qty">Quantity:</label>
+							<input type="text" name="quantity" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
+							<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+							 class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
+							<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+							 class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
+						</div>
+						<div class="card_area d-flex align-items-center">
+						<input type="submit" name="add" style="margin-top:5px;" class="btn btn-success" value="Add to Cart" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</form>
+	 <?php
+	}
+	 ?>
+	<!--================End Single Product Area =================-->
+
+	<!--================Product Description Area =================-->
+	<section class="product_description_area">
+		<div class="container">
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
+					 aria-selected="false">Reviews</a>
+					 
+				</li>
+			</ul>
+			
+			
+				<div class="tab-pane fade show active" id="review" role="tabpanel" aria-labelledby="review-tab">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="row total_rate">
+								<div class="col-6">
+									<div class="box_total">
+										<h5>Overall</h5>
+										<h4>4.0</h4>
+										<h6>(03 Reviews)</h6>
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="rating_list">
+										<h3>Based on 3 Reviews</h3>
+										<ul class="list">
+											<li><a href="#">5 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+													 class="fa fa-star"></i><i class="fa fa-star"></i> 30</a></li>
+											<li><a href="#">4 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+													 class="fa fa-star"></i><i class="fa fa-star"></i> 00</a></li>
+											<li><a href="#">3 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+													 class="fa fa-star"></i><i class="fa fa-star"></i> 00</a></li>
+											<li><a href="#">2 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+													 class="fa fa-star"></i><i class="fa fa-star"></i> 00</a></li>
+											<li><a href="#">1 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+													 class="fa fa-star"></i><i class="fa fa-star"></i> 00</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="review_list">
+								<div class="review_item">
+									<div class="media">
+										<div class="d-flex">
+											<img src="img/product/review-1.png" alt="">
+										</div>
+										<div class="media-body">
+											<h4>MK</h4>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+										</div>
+									</div>
+									<p> good device </p>
+								</div>
+								<div class="review_item">
+									<div class="media">
+										<div class="d-flex">
+											<img src="img/product/review-2.png" alt="">
+										</div>
+										<div class="media-body">
+											<h4>rakesh</h4>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i> 
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+										</div>
+									</div>
+									<p>best value for money</p>
+								</div>
+								<div class="review_item">
+									<div class="media">
+										<div class="d-flex">
+											<img src="img/product/review-3.png" alt="">
+										</div>
+										<div class="media-body">
+											<h4>Arshad</h4>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+										</div>
+									</div>
+									<p> durable as hell, superb build quality  </p>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="review_box">
+								<h4>Add a Review</h4>
+								<p>Your Rating:</p>
+								<ul class="list">
+									<li><a href="#"><i class="fa fa-star"></i></a></li>
+									<li><a href="#"><i class="fa fa-star"></i></a></li>
+									<li><a href="#"><i class="fa fa-star"></i></a></li>
+									<li><a href="#"><i class="fa fa-star"></i></a></li>
+									<li><a href="#"><i class="fa fa-star"></i></a></li>
+								</ul>
+								<p>Outstanding</p>
+								<form class="row contact_form" action="contact_process.php" method="post" id="contactForm" novalidate="novalidate">
+									<div class="col-md-12">
+										<div class="form-group">
+											<input type="text" class="form-control" id="name" name="name" placeholder="Your Full name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your Full name'">
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="form-group">
+											<input type="email" class="form-control" id="email" name="email" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'">
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="form-group">
+											<input type="text" class="form-control" id="number" name="number" placeholder="Phone Number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Phone Number'">
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="form-group">
+											<textarea class="form-control" name="message" id="message" rows="1" placeholder="Review" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Review'"></textarea></textarea>
+										</div>
+									</div>
+									<div class="col-md-12 text-right">
+										<button type="submit" value="submit" class="primary-btn">Submit Now</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Product Description Area =================-->
+
+
+	<?php
+include('bars/footer.php');
+?>
+
+
+
+
+
+
+
+------------------------------------------------------------------------------
+   <!--================Cart Area =================-->
+    <section class="cart_area">
+        <div class="container">
+            <div class="cart_inner">
+                <div class="table-responsive">
+                
+                <table class="table table-bordered">
+            <tr>
+                <th width="30%">Product Name</th>
+                <th width="10%">Quantity</th>
+                <th width="13%">Price Details</th>
+                <th width="10%">Total Price</th>
+                <th width="17%">Remove Item</th>
+            </tr>
+
+            <?php
+            	$result = mysqli_query($db, "SELECT * FROM cart");
+                while( $row = mysqli_fetch_array($result))
+                        ?>
+                        <tr>
+                            <td><?php echo $row["item_name"]; ?></td>
+                            <td><?php echo $row["qty"]; ?></td>
+                            <td>$ <?php echo $row["p_price"]; ?></td>
+                            <td>
+                               
+                        </td>
+                            <td><a href=""><span
+                                        class="text-danger">Remove Item</span></a></td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="3" align="right">Total</td>
+                            <th align="right">  </th>
+                            <td></td>
+                        </tr>
+                        <?php
+                  
+                ?>
+            </table>
+                        </tbody>
+
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================End Cart Area =================-->
+	\\
+
+
+
+
+
+	----------------------------------------------------------------------------
+
+	 
+                                <div class="tab">
+                                  <button class="tablinks" onclick="openCity(event, 'BT PREDATOR')">BTPREDATOR</button>
+                                  <button class="tablinks" onclick="openCity(event, 'BT ELDERFLAME')">BTELDERFLAME</button>
+                                  <button class="tablinks" onclick="openCity(event, 'BT OPERATOR')">BTOPERATOR</button>
+                                  <button class="tablinks" onclick="openCity(event, 'BT VASUANNAN')">BT VASUANNAN</button>
+                                  <button class="tablinks" onclick="openCity(event, 'BT SMITU')">BTSMIU</button>
+                                  
+                                </div>
+                                
+                                <div id="BT PREDATOR" class="tabcontent">
+                                  <h3>BT PREDATOR specification</h3>
+                                  <p>Operating System: Windows 10 Home (64-bit Edition)<br>
+                                    Gaming Chassis: Ant ESports ICE 130AG Mid-Tower Gaming Case w/ USB 3.0, Side Transparent Panel (Black Color)<br>
+                                    Extra Case Fans:  Default case fans<br>
+                                    CPU: AMD Ryzen 3 3100 3.80GHz  4 Cores/ 8 Threads 65W Processor<br>
+                                    Venom Boost Fast And Efficient Factory Overclocking: No Overclocking<br>
+                                    CPU / Processor Cooling Fan: STOCK FAN<br>
+                                    Motherboard: MSI B450 PRO m2 MAX MATX w/ RGB, Realtek LAN, 1 PCIe x16, 2 PCIe x1, 6 SATA3, 1 M.2 SATA/PCIe<br>
+                                    RAM / System Memory: 8GB DDR4/3200MHz Single Channel Memory (GSKILL Ripjaws)<br>
+                                    Video Card: NVIDIA GTX 1650 4GB Graphics Card<br>
+                                    Power Supply: Cooler Master / Antec 450 Watts – Standard 450Watts 80 Plus efficient Power Supply<br>
+                                    Primary Drive: 240GB Gigabyte SATA SSD<br>
+                                    Secondary Hard Drive:  Not INCLUDED <br>
+                                    Sound: HIGH DEFINITION ON-BOARD 5.1 AUDIO<br>
+                                    Internal Network Card: Onboard Gigabit LAN Network</p>
+                                </div>
+                                
+                                <div id="BT ELDERFLAME" class="tabcontent">
+                                  <h3>BT ELDERFLAME specification</h3>
+                                  <p>Operating System: Windows 10 Home (64-bit Edition)<br>
+                                    Gaming Chassis: ANT ESPORTS ICE 511 MT Mid-Tower Gaming Case w/ USB 3.0, Side Tempered Glass (Black Color)<br>
+                                    Extra Case Fans: Default case fans<br>
+                                    CPU: AMD Ryzen 5 3500X 3.80GHz  6 Cores/ 6 Threads 65W Processor<br>
+                                    Venom Boost Fast And Efficient Factory Overclocking: No Overclocking<br>
+                                    CPU / Processor Cooling Fan: STOCK FAN<br>
+                                    Motherboard: MSI B450 PRO VDH MAX MATX w/ RGB, Realtek LAN, 1 PCIe x16, 2 PCIe x1, 6 SATA3, 1 M.2 SATA/PCIe<br>
+                                    RAM / System Memory: 8GB DDR4/3200MHz Single Channel Memory (GSKILL Ripjaws)<br>
+                                    Video Card: NVIDIA GTX 1660 6GB Graphics Card<br>
+                                    Power Supply: Cooler Master / Antec 450 Watts – Standard 450Watts 80 Plus efficient Power Supply<br>
+                                    Primary Drive: 120GB Gigabyte SATA SSD<br>
+                                    Secondary Hard Drive:  1TB Western Digital Hard Drive<br>
+                                    Sound: HIGH DEFINITION ON-BOARD 5.1 AUDIO<br>
+                                    Internal Network Card: Onboard Gigabit LAN Network<br>
+                                    USB Hub & Port: Built-in USB 2.0 Ports and USB 3.0 Ports</p> 
+                                </div>
+                                
+                                <div id="BT OPERATOR" class="tabcontent">
+                                  <h3>BT OPERATOR specification</h3>
+                                  <p>Operating System: Windows 10 Home (64-bit Edition)<br>
+                                    Gaming Chassis: Cooler Master H500P  w/ USB 3.0, Side Tempered Glass (White / Black Colour )<br>
+                                    Laser Engraving: None<br>
+                                    Extra Case Fans: Default case fans<br>
+                                    CPU: AMD Ryzen 9 3950X 4.40GHz  12 Cores/ 24 Threads 105W Processor<br>
+                                    Venom Boost Fast And Efficient Factory Overclocking: Overclocked PC<br>
+                                    CPU / Processor Cooling Fan: 240mm NZXT Kraken X52 Liquid Cooler<br>
+                                    Motherboard: MSI X570 A PRO ATX w/ RGB, Realtek LAN, 3 PCIe x16, 2 PCIe x1, 6 SATA3, 2 x M.2 SATA/PCIe<br>
+                                    RAM / System Memory: 64GB DDR4/3200MHz QUAD Channel Memory ( GSKILL TridentZ RGB / CORSAIR RGB PRO )<br>
+                                    Video Card: ZOTAC NVIDIA RTX 2080 SUPER 8GB Graphics Card in VERTICAL MOUNT<br>
+                                    Power Supply: ANTEC 1000x Watts – FULLY Modular 80 Plus GOLD efficient Power Supply<br>
+                                    Primary Drive: 1TB M.2 NVMe SSD<br>
+                                    Secondary Hard Drive:  4TB SATA Seagate Barracuda Hard Drive<br>
+                                    Sound: HIGH DEFINITION ON-BOARD 5.1 AUDIO<br>
+                                    Internal Network Card: Onboard Gigabit LAN Network<br>
+                                    USB Hub & Port: Built-in USB 2.0 Ports and USB 3.0 Ports</p>
+                                </div>
+
+                                <div id="BT VASUANNAN" class="tabcontent">
+                                    <h3>BT VASUANNAN specification</h3>
+                                    <p>Operating System: Windows 10 Home (64-bit Edition) Trial<br>
+                                        Gaming Chassis: Deepcool Matrixx 50 4F / Macube 310P  Mid-Tower Gaming Case w/ USB 3.0, Side Tempered Glass ( White Or Black Color)<br>
+                                        Extra Case Fans: Default case fans<br>
+                                        CPU: AMD Ryzen 5 3600 3.80GHz  6 Cores/ 12 Threads 65W Processor<br>
+                                        Venom Boost Fast And Efficient Factory Overclocking: No Overclocking<br>
+                                        CPU / Processor Cooling Fan: STOCK FAN<br>
+                                        Motherboard: MSI B450 PRO VDH MAX Motherboard<br>
+                                        RAM / System Memory: 16GB DDR4/3200MHz DUAL Channel Memory (GSKILL Ripjaws / XPG ) ( 8GB x 2 )<br>
+                                        Video Card: NVIDIA RTX 2060 SUPER 8GB Graphics Card<br>
+                                        Power Supply: Cooler Master / Antec 550 Watts – Standard 550Watts 80 Plus efficient Power Supply<br>
+                                        Primary Drive: 240GB Kingston / Gigabyte SSD<br>
+                                        Secondary Hard Drive:  1 TB Western Digital Hard Drive<br>
+                                        Sound: HIGH DEFINITION ON-BOARD 5.1 AUDIO<br>
+                                        Internal Network Card: Onboard Gigabit LAN Network<br>
+                                        USB Hub & Port: Built-in USB 2.0 Ports and USB 3.0 Ports</p>
+                                  </div>
+                                
+                                  <div id="BT SMITU" class="tabcontent">
+                                    <h3>BT SMITU specification</h3>
+                                    <p>Operating System: Windows 10 Home (64-bit Edition)<br>
+                                        Gaming Chassis: DEEPCOOL MATRIXX  50 4F Mid-Tower Gaming Case w/ USB 3.0,Front and Side Tempered Glass (Black Colour )<br>
+                                        Extra Case Fans: Default case fans<br>
+                                        CPU: AMD Ryzen 5 3600X 4.20GHz  6 Cores/ 12 Threads 95W Processor<br>
+                                        Venom Boost Fast And Efficient Factory Overclocking:  Overclocking Supported<br>
+                                        CPU / Processor Cooling Fan: Deepcool 240mm RGB Liquid Cooler<br>
+                                        Motherboard: Aorus B450 Elite MAX ATX w/ RGB, Realtek LAN, 2 PCIe x16, 2 PCIe x1, 6 SATA3, 1 M.2 SATA/PCIe<br>
+                                        RAM / System Memory: 16GB DDR4/3200MHz DUAL Channel Memory (GSKILL Ripjaws)<br>
+                                        Video Card: NVIDIA RTX 2060 SUPER 8GB Graphics Card<br>
+                                        Power Supply: Cooler Master 650 Watts  80 Plus efficient Power Supply<br>
+                                        Primary Drive: 240GB M.2 Kingston SSD<br>
+                                        Secondary Hard Drive:  1TB SATA Seagate Barracuda Hard Drive<br>
+                                        Internal Network Card: Onboard Gigabit LAN Network<br> 
+                                        USB Hub & Port: Built-in USB 2.0 Ports and USB 3.0 Ports</p>
+                                  </div>
+								  ------------------------------------------------
+
+										Operating System: Windows 10 Home (64-bit Edition)
+                                        Gaming Chassis: DEEPCOOL MATRIXX  50 4F Mid-Tower Gaming Case w/ USB 3.0,Front and Side Tempered Glass (Black Colour )
+                                        Extra Case Fans: Default case fans
+                                        CPU: AMD Ryzen 5 3600X 4.20GHz  6 Cores/ 12 Threads 95W Processor
+                                        Venom Boost Fast And Efficient Factory Overclocking:  Overclocking Supported
+                                        CPU / Processor Cooling Fan: Deepcool 240mm RGB Liquid Cooler
+                                        Motherboard: Aorus B450 Elite MAX ATX w/ RGB
+                                        RAM / System Memory: 16GB DDR4/3200MHz DUAL Channel Memory (GSKILL Ripjaws)
+                                        Video Card: NVIDIA RTX 2060 SUPER 8GB Graphics Card
+                                        Power Supply: Cooler Master 650 Watts  80 Plus efficient Power Supply
+                                        Primary Drive: 240GB M.2 Kingston SSD
+                                        Secondary Hard Drive:  1TB SATA Seagate Barracuda Hard Drive
+                                        Internal Network Card: Onboard Gigabit LAN Network
+                                        USB Hub & Port: Built-in USB 2.0 Ports and USB 3.0 Ports

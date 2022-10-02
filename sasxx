@@ -1,0 +1,142 @@
+<?php
+session_start();
+include('bars/lheader.php');
+
+?>
+	<!-- Start Banner Area -->
+	<section class="banner-area organic-breadcrumb">
+		<div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>Login/Register</h1>
+					<nav class="d-flex align-items-center">
+						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="category.html">Login/Register</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Banner Area -->
+	<?php
+    // require('./login/db.php');
+    // When form submitted, insert values into the database.
+    // if (isset($_REQUEST['username'])) {
+		
+		// removes backslashes
+		
+        // $username = stripslashes($_REQUEST['username']);
+		
+		//escapes special characters in a string
+		
+		// $username = mysqli_real_escape_string($con, $username);
+		// $f_name = stripslashes($_REQUEST['f_name']);
+        // $f_name = mysqli_real_escape_string($con, $f_name);
+        // $email    = stripslashes($_REQUEST['email']);
+        // $email    = mysqli_real_escape_string($con, $email);
+        // $phone    = stripslashes($_REQUEST['phone_no']);
+        // $phone    = mysqli_real_escape_string($con, $phone);
+        // $address    = stripslashes($_REQUEST['address']);
+        // $address    = mysqli_real_escape_string($con, $address);
+        // $password = stripslashes($_REQUEST['password']);
+		// $password = mysqli_real_escape_string($con, $password);
+		// $pincode = stripslashes($_REQUEST['pincode']);
+        // $pincode = mysqli_real_escape_string($con, $pincode);
+        // $create_datetime = date("Y-m-d H:i:s");
+        // $query    = "INSERT into `users` (username , f_name , email , phone_no,address  , pincode ,  password , create_datetime)
+        //              VALUES ('$username','$f_name','$email','$phone','$address','$pincode', '" . md5($password) . "', '$create_datetime')";
+        // $result   = mysqli_query($con, $query);
+
+        // if ($result) {
+		 
+// 			$mes = "registerd succeccfully.\\nTry again.";
+//      echo "<div class='form'>
+//      <script type='text/javascript'>alert('$mes ');
+//    window.location= 'login.php';</script>
+        
+//         </div>";
+            // } 
+    //  else {
+	// 	$message = "fill form correctly.\\n redirecting to.";
+//      echo "<div class='form'>
+//      <script type='text/javascript'>alert('$message ');
+//    window.location= 'registration.php';</script>
+     
+//      </div>";
+    //      }
+        
+    // }
+
+?>
+
+	<!--================Login Box Area =================-->
+	<section class="login_box_area section_gap">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="login_box_img">
+						<img class="img-fluid" src="img/login.jpg" alt="">
+						<div class="hover">
+							<h4>already have account?</h4>
+							<a class="primary-btn" href="login.php">login</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="login_form_inner">
+						<h3>Register your details here</h3>
+						<form class="row login_form"  method="post" id="contactForm" novalidate="novalidate">
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control"  name="username" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
+								
+							</div>
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control" name="f_name"  placeholder="fullname" onfocus="this.placeholder = ''" onblur="this.placeholder = 'fullname'">
+								<small>*Enter your full name</small>
+							</div>
+                            <div class="col-md-12 form-group">
+								<input type="email" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"  name="email" placeholder="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'email'">
+								<small>*Format: eg:wakawaka@hotmail.com</small>
+							</div>
+                            <div class="col-md-12 form-group">
+								<input type="text" class="form-control"  name="address"  placeholder="address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'address'">
+								<small>*Format: eg:house/office,land mark near, place,district,state </small>
+							</div>
+							<div class="col-md-12 form-group">
+								<input type="tel" class="form-control" name="pincode" pattern="[0-9]{2}[0-9]{4}" placeholder="enter your pincode" onfocus="this.placeholder = ''" onblur="this.placeholder = 'pincode'">
+								<small>*Format: eg:682001</small>
+							</div>
+                            <!-- <div class="col-md-12 form-group">
+								<input type="number" class="form-control" id="name" name="phone_no" placeholder="enter your phone number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Phone number'">
+							</div> -->
+
+							<div class="col-md-12 form-group">
+								<input type="tel" class="form-control"  name="phone_no" pattern="[0-9]{10}"  placeholder="enter your phone number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Phone number'">
+							<small>*Format: eg:9000000009</small>
+							</div>
+
+							<div class="col-md-12 form-group">
+								<input type="password" class="form-control" name="password" pattern=".{5,}" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" title="Must contain at least 8 or more characters">
+								
+							</div>
+							<div class="col-md-12 form-group">
+								<div class="creat_account">
+								</div>
+							</div>
+							<div class="col-md-12 form-group">
+								<button type="submit" value="submit" name="submit" class="primary-btn">submit</button>
+							</div>
+                        </form>
+                        
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<!--================End Login Box Area =================-->
+
+<?php
+include('bars/footer.php');
+?>

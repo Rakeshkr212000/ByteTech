@@ -1,0 +1,34 @@
+ // If upload button is clicked ...
+  if (isset($_POST['upload']))
+   {
+  	// Get text
+      $item = $_POST['item'];
+      $price = $_POST['price'];
+      $discount = $_POST['discount'];
+      // Get image
+      $image = $_FILES['image'];
+      // 
+      if(file_exists("../img/". $_FILES["image"]["name"]))
+      {
+          $store=$_FILES["image"]["name"];
+          $_SESSION['status'] ="Image already exists.'. $store .'";
+          header('location: stock.php');
+      }
+      else
+      {
+          $query="INSERT INTO stock_items ('item', 'image','price','discount') VALUES ('$item, '$image','$price','$discount')";
+          $query_run= mysqli_query($db,$query);
+
+          if($query_run)
+          {
+              move_uploaded_file($_FILES["image"]["tmp_name"],"../img/" .$_FILES["image"]["name"]);
+              $_SESSION['success']= "image added";
+              header('location:stock.php');
+          }
+          else
+          {
+              $_SESSION['success']= "image not added";
+              header('location:stock.php');
+          }
+       }
+    }
